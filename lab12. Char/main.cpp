@@ -39,21 +39,9 @@ int main()
 			if (ch[i] == sim[j])
 			{
 				mass[k++] = i;
-				/* Точка контроля 1
-				cout << "Vot i = " << i << endl;
-				cout << "Vot k = " << k << endl;
-				cout << "Vot mass[i] = " << mass[k++] << endl;
-				*/
-			}
 			j++;
 		}
 	}
-	/* Точка контроля 2
-	cout << "Вот сколько предложений - " << count << endl;
-	cout << "mass[i] - " << mass[0] << endl;
-	cout << "mass[i] - " << mass[1] << endl;
-	cout << "mass[i] - " << mass[2] << endl;
-	*/
  
 	int j, max = 0;
 	for (int i = 0; i < count; i++)

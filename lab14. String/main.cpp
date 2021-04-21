@@ -12,7 +12,6 @@ int main()
 	string text = "()()((())))";
  
 	cout << "" << getScobka(text) << endl;
-	//getline(cin, text);
  
 	system("pause");
 	return 0;
@@ -34,6 +33,4 @@ int getScobka(string str) {
 	if (left == right) return 0;
 	else if (left > right) return -1;
 	else return tmp;
- 
-	//return (left == right) ? 0 : -1;
 }

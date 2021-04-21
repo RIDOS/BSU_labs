@@ -1,3 +1,4 @@
+#include "pch.h"
 #include <iostream>
 #include <cmath>
 #include <cstring>
@@ -5,8 +6,8 @@
 
 using namespace std;
 
-void methodNewton(float a, float b);
-void methodHord(float a, float b);
+void methodNewton(float a, float b, float mH);
+float methodHord(float a, float b);
 float F(float x);
 float dF(float x);
 float d2F(float x);
@@ -18,12 +19,11 @@ struct Coord
 	float Y;
 };
 
-void poisk(Coord* arr, float a, float b, float h, float M);
+bool poisk(Coord* arr, float a, float b, float h);
 
 int main()
 {
 	system("chcp 1251>nul");
-	//setlocale(LC_ALL, "Russian");
 	bool  b1 = true, b_2 = false;
 	string str, wp;
 	int num, wibork;
@@ -41,7 +41,7 @@ int main()
 		cin >> num;
 
 		system("cls");
-		float a, M, b, h;
+		float a, M, b, h, mH;
 		Coord* cor_ = new Coord[100];
 
 		switch (num)
@@ -56,23 +56,25 @@ int main()
 			cin >> M;
 
 			h = (b - a) / M;
-			
-			poisk(cor_,a, b, h, M);
 
-			cout << "Уточнить приблеженное значение? (Да/нет)";
-			cin >> wp;
+			poisk(cor_, a, b, h);
 
-			if (!(wp == "Да" || wp == "да")) {
-				break;
-			}
-			else {
-				b_2 = true;
-				cout << "Введите число:\t";
-				system("pause>nul");
-				cin >> wibork;
-				a = cor_[wibork].X;
-				b = cor_[wibork].Y;
-				system("cls");
+			if (b) {
+				cout << "Уточнить приблеженное значение? (Да/нет)";
+				cin >> wp;
+
+				if (!(wp == "Да" || wp == "да")) {
+					break;
+				}
+				else {
+					b_2 = true;
+					cout << "Введите число:\t";
+					system("pause>nul");
+					cin >> wibork;
+					a = cor_[wibork].X;
+					b = cor_[wibork].Y;
+					system("cls");
+				}
 			}
 		case 2:
 			if (!b_2) {
@@ -87,8 +89,8 @@ int main()
 			}
 
 
-			methodHord(a, b);
-			methodNewton(a, b);
+			mH = methodHord(a, b);
+			methodNewton(a, b, mH);
 			b_2 = false;
 			break;
 		default:
@@ -111,15 +113,14 @@ int main()
 	return 0;
 }
 
-void methodNewton(float a, float b) {
+void methodNewton(float a, float b, float mH) {
 	float x0, xn;
 	cout << "\nПо методу Ньютона:" << endl;
 	if (F(a) * F(b) > 0) {
 		cout << "Корней нет!" << endl;
 	}
 	else {
-		if (F(a) * d2F(a) > 0) x0 = a;
-		else x0 = b;
+		x0 = mH;
 		float eps = 0.001, f, df;
 		int iter = 0;
 
@@ -139,7 +140,7 @@ void methodNewton(float a, float b) {
 }
 
 
-void methodHord(float a, float b) {
+float methodHord(float a, float b) {
 	cout << "\nПо методу Хорд:" << endl;
 	int iter = 0;
 	while (fabs(F(b)) > 0.001)
@@ -148,6 +149,7 @@ void methodHord(float a, float b) {
 		b = a - ((a - b) * F(a)) / (F(a) - F(b));
 		cout << "iter " << ++iter << "\t" << b << endl;
 	}
+	return b;
 }
 
 float F(float x)
@@ -156,23 +158,27 @@ float F(float x)
 }
 
 float dF(float x) {
-	return -sin(x/19.0)+(19/(x*x));
+	return -sin(x / 19.0) + (19 / (x*x));
 }
 
 float d2F(float x) {
-	return -0.0562*cos(x/19.0) - (38.0/(pow(x,3)));
+	return -0.0562*cos(x / 19.0) - (38.0 / (pow(x, 3)));
 }
 
-void poisk(Coord* arr,float a, float b, float h, float M) {
+bool poisk(Coord* arr, float a, float b, float h) {
+	bool bi = false;
 	int counter = 0;
-	for (int i = a; i <= b; i += h)
-	{
-		if (F(i) * F(i+h) < 0) {
-			arr[counter].X = i;
-			arr[counter].Y = i + h;
-			cout << counter+1 << ".\t" << arr[counter].X << "\t" << arr[counter].Y << endl;
+	float k = a;
+	do {
+		if (F(k) * F(k + h) < 0) {
+			arr[counter].X = k;
+			arr[counter].Y = k + h;
+			cout << counter + 1 << ".\t" << arr[counter].X << "\t" << arr[counter].Y << endl;
 			counter++;
+			bi = true;
 		}
-	}
+		k += h;
+	} while (k <= b);
 	counter = 0;
+	return bi;
 }
