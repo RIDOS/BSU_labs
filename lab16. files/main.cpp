@@ -16,7 +16,6 @@ void createFile(int count, Chars* array);
 void outOfFile(string nameFile);
 void outNewFile(int count, Chars* array);
 
-
 int main()
 {
 	int count;
@@ -74,8 +73,8 @@ void outNewFile(int count, Chars* array)
 {
 	fstream file;
 	ofstream file_new;
-	int number = 0, _char = 0, iteration = 0;
-	file.open("text.txt", fstream::in | fstream::out | fstream::app);
+	int number = 0, _char = 0, iter = 0;
+	file.open("text.txt", fstream::in | fstream::app);
 	file_new.open("outFile.txt");
 
 	while ((_char = file.get()) != EOF)
@@ -85,19 +84,19 @@ void outNewFile(int count, Chars* array)
 			if (char(_char) != '\t' && char(_char) != ' ' && char(_char) != '*')
 			{
 				if (number++ == 0)
-					array[iteration].number = (65 - _char);
+					array[iter].number = (_char - 48);
 				else
-					array[iteration].symbol = char(_char);
+					array[iter].symbol = char(_char);
 			}
 		}
 		else
 		{
 			number = 0;
-			iteration++;
+			iter++;
 		}
 	}
 
-	for (size_t iteration = 0; iteration < count; iteration++)
+	for (int iteration = 0; iteration < count; iteration++)
 	{
 		for (int j = 0; j < array[iteration].number; j++)
 		{
