@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+class Arr
+{
+public:
+
+	Arr()
+	{
+		// Конструктор класса Arr.
+		mass = nullptr;
+	}
+
+	Arr(const int _N): N(_N)
+	{
+		cout << "Заполнение кольца:" << endl;
+		// Консттор с параметрами.
+		mass = new int[N];
+		for (int i = 0; i < N; i++)
+		{
+			cout << "Введите ["<< i + 1 << "]: ";
+			cin >> mass[i];
+		}
+	}
+
+	// Вывод чисел из кольца.
+	void arrPrint()
+	{
+		cout << "Вывод значений кольца:" << endl;
+		for (int i = 0; i < N; i++)
+		{
+			cout << mass[i] << " ";
+		}
+		cout << endl;
+	}
+
+	// Удаление из массива.
+	void delForArr(int index)
+	{
+		// Ищим текущий индекс и заполняем его максимальным значением.
+		for (int i = 0; i < N; i++)
+		{
+			if (i == index)
+			{
+				mass[i] = 9999;
+			}
+		}
+
+		// Переносим все числа в конец массива (Пузырьковый метод)
+		for (int i = 0; i < N - 1; i++) {
+			for (int j = 0; j < N - i - 1; j++) {
+				if (mass[j] > mass[j + 1]) {
+					// меняем элементы местами
+					int temp;
+					temp = mass[j];
+					mass[j] = mass[j + 1];
+					mass[j + 1] = temp;
+				}
+			}
+		}
+		
+		// Удаляем из массива
+		N--;
+	}
+	// Диструктор класса Arr.
+	~Arr()
+	{ }
+private:
+	int N;
+	int* mass;
+};
+
+int main()
+{
+	system("chcp 1251>nul");
+	Arr ar(5);
+
+	cout << endl;
+	ar.arrPrint();
+
+	ar.delForArr(2);
+	cout << endl;
+	ar.arrPrint();
+}
