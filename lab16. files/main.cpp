@@ -16,7 +16,6 @@ void createFile(int count, Chars* array);
 void outOfFile(string nameFile);
 void outNewFile(int count, Chars* array);
 
-
 int main()
 {
 	int count;
@@ -37,13 +36,13 @@ int main()
 
 void createFile(int count, Chars* array)
 {
-	char temp;
+	int temp;
 	ofstream file;
 	file.open("text.txt");
 
 	for (int i = 0; i < count; i++)
 	{
-		file << (array[i].number = (temp = rand() % 5)) << setw(10 - sizeof(temp)) << "*" << setw(10) << (array[i].symbol = rand() % 90 + 65) << endl;
+		file << (temp = (rand() % 10)) << setw(10 - sizeof(temp)) << "*" << setw(10) << char(65 + rand() % 10) << endl;
 	}
 
 	file.close();
@@ -73,15 +72,38 @@ void outOfFile(string nameFile)
 void outNewFile(int count, Chars* array)
 {
 	fstream file;
-	file.open("outFile.txt", fstream::in | fstream::out | fstream::app);
+	ofstream file_new;
+	int number = 0, _char = 0, iter = 0;
+	file.open("text.txt", fstream::in | fstream::app);
+	file_new.open("outFile.txt");
 
-	for (size_t iteration = 0; iteration < count; iteration++)
+	while ((_char = file.get()) != EOF)
+	{
+		if (char(_char) != '\n')
+		{
+			if (char(_char) != '\t' && char(_char) != ' ' && char(_char) != '*')
+			{
+				if (number++ == 0)
+					array[iter].number = (_char - 48);
+				else
+					array[iter].symbol = char(_char);
+			}
+		}
+		else
+		{
+			number = 0;
+			iter++;
+		}
+	}
+
+	for (int iteration = 0; iteration < count; iteration++)
 	{
 		for (int j = 0; j < array[iteration].number; j++)
 		{
-			file << array[iteration].symbol;
+			file_new << array[iteration].symbol;
 		}
-		file << endl;
+		file_new << endl;
 	}
 	file.close();
+	file_new.close();
 }
